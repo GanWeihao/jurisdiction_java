@@ -1,118 +1,209 @@
+/*     */
 package org.item.jurisdiction.service.Impl;
-
-import org.item.jurisdiction.bo.Rules_Menu;
-import org.item.jurisdiction.mapper.RulesMapper;
-import org.item.jurisdiction.model.Role;
-import org.item.jurisdiction.model.RoleRules;
-import org.item.jurisdiction.model.UserRole;
-import org.item.jurisdiction.service.RulesService;
-import org.item.jurisdiction.model.Rules;
-import org.springframework.stereotype.Service;
+/*     */
+/*     */
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.UUID;
+/*     */ import java.util.UUID;
+/*     */ import org.item.jurisdiction.mapper.RulesMapper;
+/*     */ import org.item.jurisdiction.model.Role;
+/*     */ import org.item.jurisdiction.model.RoleRules;
+/*     */ import org.item.jurisdiction.model.Rules;
+/*     */ import org.item.jurisdiction.model.UserRole;
+/*     */ import org.item.jurisdiction.service.Impl.RulesServiceImpl;
+/*     */ import org.item.jurisdiction.service.RulesService;
+/*     */ import org.springframework.stereotype.Service;
 
+/*     */
+/*     */
 @Service
-public class RulesServiceImpl implements RulesService {
+/*     */ public class RulesServiceImpl
+        /*     */ implements RulesService
+        /*     */ {
     RulesMapper rulesMapper = new RulesMapper();
 
-    @Override
     public List findByRole(String roleId) {
-        List list = rulesMapper.findByRole(roleId);
-        return list;
+        return this.rulesMapper.findByRole(roleId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*  28 */
     public List findAllRules() {
-        return rulesMapper.findAllRules();
+        return this.rulesMapper.findAllRules();
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*  33 */
     public List findByUserId(String userId) {
-        return rulesMapper.findByUserId(userId);
+        return this.rulesMapper.findByUserId(userId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*  38 */
     public List findAll() {
-        return rulesMapper.findAll();
+        return this.rulesMapper.findAll();
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*  43 */
     public int delall(String userId) {
-        return rulesMapper.delall(userId);
+        return this.rulesMapper.delall(userId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
     public int addUserRole(UserRole userRole) {
-        String id = UUID.randomUUID().toString().replaceAll("-","");
+        /*  48 */
+        String id = UUID.randomUUID().toString().replaceAll("-", "");
+        /*  49 */
         userRole.setUserRoleId(id);
-        return rulesMapper.addUserRole(userRole);
+        /*  50 */
+        return this.rulesMapper.addUserRole(userRole);
+        /*     */
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*  55 */
     public int delRole(String roleId) {
-        return rulesMapper.delRole(roleId);
+        return this.rulesMapper.delRole(roleId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
     public String addRole(Role role) {
-        String id = UUID.randomUUID().toString().replaceAll("-","");
-        Integer status = 0;
+        /*  60 */
+        String id = UUID.randomUUID().toString().replaceAll("-", "");
+        /*  61 */
+        Integer status = Integer.valueOf(0);
+        /*  62 */
         role.setRoleId(id);
+        /*  63 */
         role.setRoleStatus(status);
-        rulesMapper.addRole(role);
+        /*  64 */
+        this.rulesMapper.addRole(role);
+        /*  65 */
         return id;
+        /*     */
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*  70 */
     public int delRoleRules(RoleRules roleRules) {
-        return rulesMapper.delRoleRules(roleRules);
+        return this.rulesMapper.delRoleRules(roleRules);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
     public int setRules(RoleRules roleRules) {
-        String id = UUID.randomUUID().toString().replaceAll("-","");
+        /*  75 */
+        String id = UUID.randomUUID().toString().replaceAll("-", "");
+        /*  76 */
         roleRules.setRoleRulesId(id);
-        int i = rulesMapper.setRules(roleRules);
-        return i;
+        /*  77 */
+        return this.rulesMapper.setRules(roleRules);
+        /*     */
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*  83 */
     public Role findByRoleId(String roleId) {
-        return rulesMapper.findByRoleId(roleId);
+        return this.rulesMapper.findByRoleId(roleId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /*  88 */
     public List findallRulesWithMenu() throws ParseException {
         return rulesMapper.findallRulesWithMenu();
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
     public int inserrules(Rules rules) {
-        String id = UUID.randomUUID().toString().replaceAll("-","");
+        /*  93 */
+        String id = UUID.randomUUID().toString().replaceAll("-", "");
+        /*  94 */
         rules.setRulesId(id);
-        rules.setRulesStatus(0);
-        return rulesMapper.inserrules(rules);
+        /*  95 */
+        rules.setRulesStatus(Integer.valueOf(0));
+        /*  96 */
+        return this.rulesMapper.inserrules(rules);
+        /*     */
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /* 101 */
     public int deleteRules(String rulesId) {
-        return rulesMapper.deleteRules(rulesId);
+        return this.rulesMapper.deleteRules(rulesId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /* 106 */
     public int deleteRoleRules(String rulesId) {
-        return rulesMapper.deleteRules(rulesId);
+        return this.rulesMapper.deleteRules(rulesId);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /* 111 */
     public int updateRules(Rules rules) {
-        return rulesMapper.updateRules(rules);
+        return this.rulesMapper.updateRules(rules);
     }
 
-    @Override
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /* 116 */
     public List findAllMenu() {
-        return rulesMapper.findAllMenu();
+        return this.rulesMapper.findAllMenu();
     }
+
+    /*     */
+    /*     */
+    /*     */
+    /*     */
+    /* 121 */
+    public List selectAllUrl() {
+        return this.rulesMapper.selectAllUrl();
+    }
+    /*     */
 }

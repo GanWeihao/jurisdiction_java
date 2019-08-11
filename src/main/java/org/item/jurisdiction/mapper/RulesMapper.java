@@ -1,184 +1,211 @@
 package org.item.jurisdiction.mapper;
 
-import org.item.jurisdiction.bo.Rules_Menu;
-import org.item.jurisdiction.model.*;
-import org.item.jurisdiction.util.SqlUtil;
-import org.item.jurisdiction.util.StringUtil;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * 权限
- */
+import org.item.jurisdiction.bo.Rules_Menu;
+import org.item.jurisdiction.mapper.RulesMapper;
+import org.item.jurisdiction.model.Menu;
+import org.item.jurisdiction.model.Role;
+import org.item.jurisdiction.model.RoleRules;
+import org.item.jurisdiction.model.Rules;
+import org.item.jurisdiction.model.Url;
+import org.item.jurisdiction.model.UserRole;
+import org.item.jurisdiction.util.SqlUtil;
+import org.item.jurisdiction.util.StringUtil;
+
 public class RulesMapper {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
-    //根据id查角色
-    public Role findByRoleId(String roleId){
+    /*  18 */ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
+
+    public Role findByRoleId(String roleId) {
+        /*  21 */
         String sql = "select * from role where ROLE_ID=?";
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, roleId);
+        /*  22 */
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[]{roleId});
+        /*  23 */
         Role role = null;
-        if(list.size()>0){
+        /*  24 */
+        if (list.size() > 0) {
+            /*  25 */
             role = new Role();
-            role.setRoleId(StringUtil.isnull(list.get(0).get("ROLE_ID")).toString());
-            role.setRoleName(StringUtil.isnull(list.get(0).get("ROLE_NAME")).toString());
-            role.setRoleStatus((Integer) StringUtil.iszore(list.get(0).get("ROLE_STATUS")));
+            /*  26 */
+            role.setRoleId(StringUtil.isnull(((HashMap) list.get(0)).get("ROLE_ID")).toString());
+            /*  27 */
+            role.setRoleName(StringUtil.isnull(((HashMap) list.get(0)).get("ROLE_NAME")).toString());
+            /*  28 */
+            role.setRoleStatus((Integer) StringUtil.iszore(((HashMap) list.get(0)).get("ROLE_STATUS")));
         }
+        /*  30 */
         return role;
     }
 
-    //根据角色查询权限
-    public List findByRole(String roleId){
-        String sql = "SELECT A.RULES_ID rulesId ,A.RULES_NAME rulesName FROM rules A\n" +
-                "LEFT JOIN role_rules B ON A.RULES_ID = B.ROLE_RULES_RULES_ID\n" +
-                "LEFT JOIN role C ON C.ROLE_ID = B.ROLE_RULES_ROLE_ID\n" +
-                "WHERE C.ROLE_ID = ?";
-        List list = SqlUtil.executeQuery(sql, roleId);
-        return list;
+
+    public List findByRole(String roleId) {
+        /*  35 */
+        String sql = "SELECT A.RULES_ID rulesId ,A.RULES_NAME rulesName FROM rules A\nLEFT JOIN role_rules B ON A.RULES_ID = B.ROLE_RULES_RULES_ID\nLEFT JOIN role C ON C.ROLE_ID = B.ROLE_RULES_ROLE_ID\nWHERE C.ROLE_ID = ?";
+
+
+
+        /*  39 */
+        return SqlUtil.executeQuery(sql, new Object[]{roleId});
     }
 
-    //查询用户角色
-    public List findByUserId(String userId){
-        String sql = "select a.ROLE_ID roleId,a.ROLE_NAME roleName from role a\n" +
-                "left join user_role b on a.ROLE_ID = b.USER_ROLE_ROLE_ID\n" +
-                "left join user c on b.USER_ROLE_USER_ID = c.USER_ID\n" +
-                "where c.USER_ID = ?";
-        List list = SqlUtil.executeQuery(sql, userId);
-        return list;
+
+    public List findByUserId(String userId) {
+        /*  45 */
+        String sql = "select a.ROLE_ID roleId,a.ROLE_NAME roleName from role a\nleft join user_role b on a.ROLE_ID = b.USER_ROLE_ROLE_ID\nleft join user c on b.USER_ROLE_USER_ID = c.USER_ID\nwhere c.USER_ID = ?";
+
+
+
+        /*  49 */
+        return SqlUtil.executeQuery(sql, new Object[]{userId});
     }
 
-    //查询所有角色
-    public List findAll(){
+
+    public List findAll() {
+        /*  55 */
         String sql = "select * from role";
-        List list = SqlUtil.executeQuery(sql);
-        return list;
+        /*  56 */
+        return SqlUtil.executeQuery(sql, new Object[0]);
     }
 
-    //删除用户所有角色
-    public int delall(String userId){
+
+    public int delall(String userId) {
+        /*  62 */
         String sql = "delete from user_role where USER_ROLE_USER_ID = ?";
-        int i = SqlUtil.executeUpdate(sql, userId);
-        return i;
+        /*  63 */
+        return SqlUtil.executeUpdate(sql, new Object[]{userId});
     }
 
-    //给用户添加角色
-    public int addUserRole(UserRole userRole){
+
+    public int addUserRole(UserRole userRole) {
+        /*  69 */
         String sql = "insert into user_role values(?, ?, ?)";
-        int i = SqlUtil.executeUpdate(sql, userRole.getUserRoleId(), userRole.getUserRoleUserId(), userRole.getUserRoleRoleId());
-        return i;
+        /*  70 */
+        return SqlUtil.executeUpdate(sql, new Object[]{userRole.getUserRoleId(), userRole.getUserRoleUserId(), userRole.getUserRoleRoleId()});
     }
 
-    //查询所有权限
-    public List findAllRules(){
+
+    public List findAllRules() {
+        /*  76 */
         String sql = "select * from rules order by RULES_ORDER";
-        List list = SqlUtil.executeQuery(sql);
-        return list;
+        /*  77 */
+        return SqlUtil.executeQuery(sql, new Object[0]);
     }
 
-    //添加角色
-    public int addRole(Role role){
+
+    public int addRole(Role role) {
+        /*  83 */
         String sql = "insert into role values(?, ?, ?)";
-        int i = SqlUtil.executeUpdate(sql,role.getRoleId(), role.getRoleName(), role.getRoleStatus());
-        return i;
+        /*  84 */
+        return SqlUtil.executeUpdate(sql, new Object[]{role.getRoleId(), role.getRoleName(), role.getRoleStatus()});
     }
 
-    //删除角色所有权限
-    public int delRoleRules(RoleRules roleRules){
+
+    public int delRoleRules(RoleRules roleRules) {
+        /*  90 */
         String sql1 = "delete from role_rules where ROLE_RULES_ROLE_ID=?";
-        int i = SqlUtil.executeUpdate(sql1, roleRules.getRoleRulesRoleId());
-        return i;
+        /*  91 */
+        return SqlUtil.executeUpdate(sql1, new Object[]{roleRules.getRoleRulesRoleId()});
     }
 
-    //给角色设置权限
-    public int setRules(RoleRules roleRules){
+
+    public int setRules(RoleRules roleRules) {
+        /*  97 */
         String sql2 = "insert into role_rules values (?, ?, ?)";
-        int j = SqlUtil.executeUpdate(sql2, roleRules.getRoleRulesId(), roleRules.getRoleRulesRoleId(), roleRules.getRoleRulesRulesId());
-        return j;
+        /*  98 */
+        return SqlUtil.executeUpdate(sql2, new Object[]{roleRules.getRoleRulesId(), roleRules.getRoleRulesRoleId(), roleRules.getRoleRulesRulesId()});
     }
 
-    //删除角色
-    public int delRole(String roleId){
+
+    public int delRole(String roleId) {
+        /* 104 */
         String sql = "delete from role where ROLE_ID=?";
-        int i = SqlUtil.executeUpdate(sql, roleId);
-        return i;
+        /* 105 */
+        return SqlUtil.executeUpdate(sql, new Object[]{roleId});
     }
 
-    //查询所有权限（带上级菜单）
-    public List findallRulesWithMenu() throws ParseException {
-//        String sql = "SELECT\n" +
-//                "\ta.RULES_ID rulesId,\n" +
-//                "\ta.RULES_NAME rulesName,\n" +
-//                "\ta.RULES_TIME rulesTime,\n" +
-//                "\tb.MENU_ID menuId,\n" +
-//                "\tb.MENU_NAME menuName \n" +
-//                "FROM\n" +
-//                "\trules a\n" +
-//                "\tLEFT JOIN menu b ON a.RULES_MENU_ID = b.MENU_ID";
 
-        String sql = "SELECT\n" +
-                "\t*\n" +
-                "FROM\n" +
-                "\trules a\n" +
-                "\tLEFT JOIN menu b ON a.RULES_MENU_ID = b.MENU_ID";
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql);
+    public List findallRulesWithMenu() throws ParseException {
+        String sql = "SELECT\n\t*\nFROM\n\trules a\n\tLEFT JOIN menu b ON a.RULES_MENU_ID = b.MENU_ID";
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[0]);
         List li = new ArrayList();
-        if(list.size()>0){
-            for(int i=0;i<list.size();i++){
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
                 Rules_Menu rules_menu = new Rules_Menu();
                 Menu menu = new Menu();
-                rules_menu.setRulesId(StringUtil.isnull(list.get(i).get("RULES_ID")).toString());
-                rules_menu.setRulesMenuId(StringUtil.isnull(list.get(i).get("RULES_MENU_ID")).toString());
-                rules_menu.setRulesName(StringUtil.isnull(list.get(i).get("RULES_NAME")).toString());
-                rules_menu.setRulesTime(sdf.parse(StringUtil.isnull(list.get(i).get("RULES_TIME")).toString()));
-                rules_menu.setRulesStatus(Integer.valueOf(StringUtil.isnull(list.get(i).get("RULES_STATUS")).toString()));
+                rules_menu.setRulesId(StringUtil.isnull(((HashMap) list.get(i)).get("RULES_ID")).toString());
+                rules_menu.setRulesMenuId(StringUtil.isnull(((HashMap) list.get(i)).get("RULES_MENU_ID")).toString());
+                /* 134 */
+                rules_menu.setRulesName(StringUtil.isnull(((HashMap) list.get(i)).get("RULES_NAME")).toString());
+                /* 135 */
+                rules_menu.setRulesTime(this.sdf.parse(StringUtil.isnull(((HashMap) list.get(i)).get("RULES_TIME")).toString()));
+                /* 136 */
+                rules_menu.setRulesStatus(Integer.valueOf(StringUtil.isnull(((HashMap) list.get(i)).get("RULES_STATUS")).toString()));
+                /* 137 */
+                rules_menu.setRulesUrl(StringUtil.isnull(((HashMap) list.get(i)).get("RULES_URL")).toString());
 
-                menu.setMenuId(StringUtil.isnull(list.get(i).get("MENU_ID")).toString());
-                menu.setMenuName(StringUtil.isnull(list.get(i).get("MENU_NAME")).toString());
+                /* 139 */
+                menu.setMenuId(StringUtil.isnull(((HashMap) list.get(i)).get("MENU_ID")).toString());
+                /* 140 */
+                menu.setMenuName(StringUtil.isnull(((HashMap) list.get(i)).get("MENU_NAME")).toString());
                 rules_menu.setMenu(menu);
-
                 li.add(rules_menu);
             }
         }
         return li;
     }
 
-    //添加权限
-    public int inserrules(Rules rules){
-        String sql = "insert into rules " +
-                "(RULES_ID,RULES_MENU_ID,RULES_NAME,RULES_TIME,RULES_STATUS) " +
-                "values(?,?,?,now(),?)";
-        int i = SqlUtil.executeUpdate(sql,rules.getRulesId(),rules.getRulesMenuId(),rules.getRulesName(),rules.getRulesStatus());
-        return i;
+
+    public int inserrules(Rules rules) {
+        String sql = "insert into rules (RULES_ID,RULES_MENU_ID,RULES_NAME,RULES_TIME,RULES_STATUS,RULES_URL) values(?,?,?,now(),?,?)";
+        return SqlUtil.executeUpdate(sql, new Object[]{rules.getRulesId(), rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesStatus(), rules.getRulesUrl()});
     }
 
-    //修改权限
-    public int updateRules(Rules rules){
-        String sql = "update rules set RULES_MENU_ID=? , RULES_NAME=? where RULES_ID=?";
-        int i = SqlUtil.executeUpdate(sql, rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesId());
-        return i;
+
+    public int updateRules(Rules rules) {
+        String sql = "update rules set RULES_MENU_ID=? , RULES_NAME=? , RULES_URL=? where RULES_ID=?";
+        return SqlUtil.executeUpdate(sql, new Object[]{rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesUrl(), rules.getRulesId()});
     }
 
-    //查询所有菜单
-    public List findAllMenu(){
+
+    public List findAllMenu() {
         String sql = "select * from menu";
-        List list = SqlUtil.executeQuery(sql);
-        return list;
+        return SqlUtil.executeQuery(sql, new Object[0]);
     }
 
-    //删除权限
-    public int deleteRules(String rulesId){
+
+    public int deleteRules(String rulesId) {
         String sql = "delete from rules where RULES_ID=?";
-        int i = SqlUtil.executeUpdate(sql, rulesId);
-        return i;
+        String sql2 = "delete from role_rules where ROLE_RULES_RULES_ID=?";
+        int i = SqlUtil.executeUpdate(sql, new Object[]{rulesId});
+        return SqlUtil.executeUpdate(sql2, new Object[]{rulesId});
     }
 
-    //根据权限ID删除赋权表
-    public int deleteRoleRules(String rulesId){
+
+    public int deleteRoleRules(String rulesId) {
+        /* 183 */
         String sql = "delete from role_rules where ROLE_RULES_RULES_ID=?";
-        int i = SqlUtil.executeUpdate(sql, rulesId);
-        return i;
+        /* 184 */
+        return SqlUtil.executeUpdate(sql, new Object[]{rulesId});
+    }
+
+
+    public List selectAllUrl() {
+        String sql = "select * from url";
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[0]);
+        List li = new ArrayList();
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                Url url = new Url();
+                url.setUrlId(StringUtil.isnull(((HashMap) list.get(i)).get("URL_ID")).toString());
+                url.setUrlName(StringUtil.isnull(((HashMap) list.get(i)).get("URL_NAME")).toString());
+                li.add(url);
+            }
+        }
+        return li;
     }
 }

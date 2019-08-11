@@ -1,139 +1,138 @@
-package org.item.jurisdiction.service.Impl;
-
-import org.item.jurisdiction.mapper.UserMapper;
-import org.item.jurisdiction.model.User;
-import org.item.jurisdiction.service.UserService;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.util.List;
-import java.util.UUID;
-
-@Service
-public class UserServiceImpl implements UserService {
-
-    UserMapper userMapper = new UserMapper();
-
-
-    //更改姓名
-    @Override
-    public int updateName(User user) {
-        int i = userMapper.updateName(user);
-        return i;
-    }
-
-    //解绑邮箱
-    @Override
-    public int delEmail(String userId) {
-        int i = userMapper.delEmail(userId);
-        return i;
-    }
-
-    //修改邮箱
-    @Override
-    public int updateEmail(String userEmail, String userId) {
-        int i = userMapper.updateEmail(userEmail, userId);
-        return i;
-    }
-
-    //查询所有用户
-    @Override
-    public List findAllUser() throws ParseException {
-        return userMapper.findAllUser();
-    }
-
-    //更换头像
-    @Override
-    public int updateHead(User user) {
-        int i = userMapper.updateHead(user);
-        return i;
-    }
-
-    //登陆
-    @Override
-    public User userLogin(String username, String usermail, String password) throws ParseException {
-        User user = userMapper.userLogin(username, usermail, password);
-        return user;
-    }
-
-    //首次登录
-    @Override
-    public int loginFirst(String userId) {
-        int i = userMapper.loginFirst(userId);
-        return i;
-    }
-
-    //根据ID查询用户
-    @Override
-    public User findByUserId(String id) throws ParseException {
-        User user = userMapper.findByUserId(id);
-        return user;
-    }
-
-    //菜单
-    @Override
-    public List findMenuByUserId(String id) {
-        List list = userMapper.findMenuByUserId(id);
-        return list;
-    }
-
-    //权限
-    @Override
-    public List findRulesById(String userId) {
-        List list = userMapper.findRulesById(userId);
-        return list;
-    }
-
-    //角色
-    @Override
-    public List findRoleByUserId(String userId) {
-        List list = userMapper.findRoleByUserId(userId);
-        return list;
-    }
-
-    @Override
-    public String userAdd(User user) {
-        if(user.getUserTelphone() == null){
-            user.setUserTelphone("");
-        }
-        if(user.getUserEmail() == null){
-            user.setUserEmail("");
-        }
-
-        String id = UUID.randomUUID().toString();
-        user.setUserId(id);
-        user.setUserError(0);
-        user.setUserStatus(0);
-        int i = userMapper.userAdd(user);
-        return id;
-    }
-
-    @Override
-    public List findByUserName(String username) {
-        List list = userMapper.findByUserName(username);
-        return list;
-    }
-
-    @Override
-    public List findByUserEmail(String useremail) {
-        List list = userMapper.findByUserEmail(useremail);
-        return list;
-    }
-
-    @Override
-    public List findByUserTel(String usertelphone) {
-        List list = userMapper.findByUserTel(usertelphone);
-        return list;
-    }
-
-    @Override
-    public int deleteUser(String userId) {
-        return userMapper.deleteUser(userId);
-    }
-
-    //修改用户资料
-    @Override
-    public int updateUser(User user) {
-        return userMapper.updateUser(user);
-    }
-}
+/*     */ package org.item.jurisdiction.service.Impl;
+/*     */ 
+/*     */ import java.text.ParseException;
+/*     */ import java.util.List;
+/*     */ import java.util.UUID;
+/*     */ import org.item.jurisdiction.mapper.UserMapper;
+/*     */ import org.item.jurisdiction.model.User;
+/*     */ import org.item.jurisdiction.service.Impl.UserServiceImpl;
+/*     */ import org.item.jurisdiction.service.UserService;
+/*     */ import org.springframework.stereotype.Service;
+/*     */ 
+/*     */ @Service
+/*     */ public class UserServiceImpl
+/*     */   implements UserService {
+/*  15 */   UserMapper userMapper = new UserMapper();
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  21 */   public int updateName(User user) { return this.userMapper.updateName(user); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  28 */   public int delEmail(String userId) { return this.userMapper.delEmail(userId); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  35 */   public int updateEmail(String userEmail, String userId) { return this.userMapper.updateEmail(userEmail, userId); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  42 */   public List findAllUser() throws ParseException { return this.userMapper.findAllUser(); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  48 */   public int updateHead(User user) { return this.userMapper.updateHead(user); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  55 */   public User userLogin(String username, String usermail, String password) throws ParseException { return this.userMapper.userLogin(username, usermail, password); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  62 */   public int loginFirst(String userId) { return this.userMapper.loginFirst(userId); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  69 */   public User findByUserId(String id) throws ParseException { return this.userMapper.findByUserId(id); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  76 */   public List findMenuByUserId(String id) { return this.userMapper.findMenuByUserId(id); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  83 */   public List findRulesById(String userId) { return this.userMapper.findRulesById(userId); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*  90 */   public List findRoleByUserId(String userId) { return this.userMapper.findRoleByUserId(userId); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/*     */   public String userAdd(User user) {
+/*  96 */     if (user.getUserTelphone() == null) {
+/*  97 */       user.setUserTelphone("");
+/*     */     }
+/*  99 */     if (user.getUserEmail() == null) {
+/* 100 */       user.setUserEmail("");
+/*     */     }
+/*     */     
+/* 103 */     String id = UUID.randomUUID().toString();
+/* 104 */     user.setUserId(id);
+/* 105 */     user.setUserError(Integer.valueOf(0));
+/* 106 */     user.setUserStatus(Integer.valueOf(0));
+/* 107 */     int i = this.userMapper.userAdd(user);
+/* 108 */     return id;
+/*     */   }
+/*     */ 
+/*     */ 
+/*     */   
+/* 113 */   public List findByUserName(String username) { return this.userMapper.findByUserName(username); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/* 119 */   public List findByUserEmail(String useremail) { return this.userMapper.findByUserEmail(useremail); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/* 125 */   public List findByUserTel(String usertelphone) { return this.userMapper.findByUserTel(usertelphone); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/* 131 */   public int deleteUser(String userId) { return this.userMapper.deleteUser(userId); }
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */   
+/* 137 */   public int updateUser(User user) { return this.userMapper.updateUser(user); }
+/*     */ }

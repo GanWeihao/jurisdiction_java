@@ -1,32 +1,36 @@
 package org.item.jurisdiction.model;
 
+
 public class Menu {
     private String menuId;
-
-    private String menuName;
 
     public Menu(String menuId, String menuName) {
         this.menuId = menuId;
         this.menuName = menuName;
     }
 
+
+    private String menuName;
+
     public Menu() {
-        super();
     }
 
     public String getMenuId() {
-        return menuId;
+        return this.menuId;
     }
+
 
     public void setMenuId(String menuId) {
-        this.menuId = menuId == null ? null : menuId.trim();
+        this.menuId = (menuId == null) ? null : menuId.trim();
     }
+
 
     public String getMenuName() {
-        return menuName;
+        return this.menuName;
     }
 
+
     public void setMenuName(String menuName) {
-        this.menuName = menuName == null ? null : menuName.trim();
+        this.menuName = (menuName == null) ? null : menuName.trim();
     }
 }
