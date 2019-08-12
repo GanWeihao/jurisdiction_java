@@ -1,4 +1,3 @@
-/*     */
 package org.item.jurisdiction.controller;
 
 import java.util.Date;
