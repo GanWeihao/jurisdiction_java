@@ -21,10 +21,10 @@ import java.util.Properties;
  */
 public class SqlUtil {
 
-    private  static  final  String  DRIVER="driver";
-    private  static  final  String  URL ="url";
-    private  static  final  String  USERNAME="username";
-    private  static  final  String  PASSWORD="password";
+    private  static  final  String  DRIVER="jdbc.driver";
+    private  static  final  String  URL ="jdbc.url";
+    private  static  final  String  USERNAME="jdbc.username";
+    private  static  final  String  PASSWORD="jdbc.password";
     static  Properties proper =new Properties();
     //本地变量  或者线程变量
     static  ThreadLocal<Connection>   container=new  ThreadLocal<Connection>();
@@ -35,6 +35,7 @@ public class SqlUtil {
         try {
             //通过类加载器 加载在类跟路径下的属性配置文件
             proper.load(SqlUtil.class.getClassLoader().getResourceAsStream("jdbc.properties"));
+            System.out.println("加载成功");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,6 +46,7 @@ public class SqlUtil {
     static {
         try {
             Class.forName(proper.getProperty(DRIVER));
+            System.out.println("驱动加载成功");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -57,6 +59,7 @@ public class SqlUtil {
                 conn =	DriverManager.getConnection(proper.getProperty(URL),
                         proper.getProperty(USERNAME),proper.getProperty(PASSWORD));
                 container.set(conn);
+                System.out.println("连接成功");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,7 +67,7 @@ public class SqlUtil {
         return  conn;
     }
     //执行DQL语句 ResultSet 关闭之后 数据无法取出来了
-    public  static ArrayList<HashMap<String,Object>>    executeQuery(String sql,Object ... params){
+    public  static ArrayList<HashMap<String,Object>>  executeQuery(String sql,Object ... params){
         ArrayList<HashMap<String,Object>>  list=new  ArrayList<HashMap<String,Object>>();
         Connection conn =	getConnection();
         PreparedStatement pst=null;

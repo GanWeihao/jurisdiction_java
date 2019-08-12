@@ -22,7 +22,7 @@ public class RulesMapper {
 
     public Role findByRoleId(String roleId) {
         String sql = "select * from role where ROLE_ID=?";
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[]{roleId});
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, roleId);
         Role role = null;
         if (list.size() > 0) {
             role = new Role();
@@ -35,12 +35,12 @@ public class RulesMapper {
 
     public List findByRole(String roleId) {
         String sql = "SELECT A.RULES_ID rulesId ,A.RULES_NAME rulesName FROM rules A\nLEFT JOIN role_rules B ON A.RULES_ID = B.ROLE_RULES_RULES_ID\nLEFT JOIN role C ON C.ROLE_ID = B.ROLE_RULES_ROLE_ID\nWHERE C.ROLE_ID = ?";
-        return SqlUtil.executeQuery(sql, new Object[]{roleId});
+        return SqlUtil.executeQuery(sql, roleId);
     }
 
     public List findByUserId(String userId) {
         String sql = "select a.ROLE_ID roleId,a.ROLE_NAME roleName from role a\nleft join user_role b on a.ROLE_ID = b.USER_ROLE_ROLE_ID\nleft join user c on b.USER_ROLE_USER_ID = c.USER_ID\nwhere c.USER_ID = ?";
-        return SqlUtil.executeQuery(sql, new Object[]{userId});
+        return SqlUtil.executeQuery(sql, userId);
     }
 
     public List findAll() {
@@ -50,37 +50,37 @@ public class RulesMapper {
 
     public int delall(String userId) {
         String sql = "delete from user_role where USER_ROLE_USER_ID = ?";
-        return SqlUtil.executeUpdate(sql, new Object[]{userId});
+        return SqlUtil.executeUpdate(sql, userId);
     }
 
     public int addUserRole(UserRole userRole) {
         String sql = "insert into user_role values(?, ?, ?)";
-        return SqlUtil.executeUpdate(sql, new Object[]{userRole.getUserRoleId(), userRole.getUserRoleUserId(), userRole.getUserRoleRoleId()});
+        return SqlUtil.executeUpdate(sql, userRole.getUserRoleId(), userRole.getUserRoleUserId(), userRole.getUserRoleRoleId());
     }
 
     public List findAllRules() {
         String sql = "select * from rules order by RULES_ORDER";
-        return SqlUtil.executeQuery(sql, new Object[0]);
+        return SqlUtil.executeQuery(sql);
     }
 
     public int addRole(Role role) {
         String sql = "insert into role values(?, ?, ?)";
-        return SqlUtil.executeUpdate(sql, new Object[]{role.getRoleId(), role.getRoleName(), role.getRoleStatus()});
+        return SqlUtil.executeUpdate(sql, role.getRoleId(), role.getRoleName(), role.getRoleStatus());
     }
 
     public int delRoleRules(RoleRules roleRules) {
         String sql1 = "delete from role_rules where ROLE_RULES_ROLE_ID=?";
-        return SqlUtil.executeUpdate(sql1, new Object[]{roleRules.getRoleRulesRoleId()});
+        return SqlUtil.executeUpdate(sql1, roleRules.getRoleRulesRoleId());
     }
 
     public int setRules(RoleRules roleRules) {
         String sql2 = "insert into role_rules values (?, ?, ?)";
-        return SqlUtil.executeUpdate(sql2, new Object[]{roleRules.getRoleRulesId(), roleRules.getRoleRulesRoleId(), roleRules.getRoleRulesRulesId()});
+        return SqlUtil.executeUpdate(sql2, roleRules.getRoleRulesId(), roleRules.getRoleRulesRoleId(), roleRules.getRoleRulesRulesId());
     }
 
     public int delRole(String roleId) {
         String sql = "delete from role where ROLE_ID=?";
-        return SqlUtil.executeUpdate(sql, new Object[]{roleId});
+        return SqlUtil.executeUpdate(sql, roleId);
     }
 
     public List findallRulesWithMenu() throws ParseException {
@@ -108,39 +108,39 @@ public class RulesMapper {
 
     public int inserrules(Rules rules) {
         String sql = "insert into rules (RULES_ID,RULES_MENU_ID,RULES_NAME,RULES_TIME,RULES_STATUS,RULES_URL) values(?,?,?,now(),?,?)";
-        return SqlUtil.executeUpdate(sql, new Object[]{rules.getRulesId(), rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesStatus(), rules.getRulesUrl()});
+        return SqlUtil.executeUpdate(sql, rules.getRulesId(), rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesStatus(), rules.getRulesUrl());
     }
 
 
     public int updateRules(Rules rules) {
         String sql = "update rules set RULES_MENU_ID=? , RULES_NAME=? , RULES_URL=? where RULES_ID=?";
-        return SqlUtil.executeUpdate(sql, new Object[]{rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesUrl(), rules.getRulesId()});
+        return SqlUtil.executeUpdate(sql, rules.getRulesMenuId(), rules.getRulesName(), rules.getRulesUrl(), rules.getRulesId());
     }
 
 
     public List findAllMenu() {
         String sql = "select * from menu";
-        return SqlUtil.executeQuery(sql, new Object[0]);
+        return SqlUtil.executeQuery(sql);
     }
 
 
     public int deleteRules(String rulesId) {
         String sql = "delete from rules where RULES_ID=?";
         String sql2 = "delete from role_rules where ROLE_RULES_RULES_ID=?";
-        int i = SqlUtil.executeUpdate(sql, new Object[]{rulesId});
-        return SqlUtil.executeUpdate(sql2, new Object[]{rulesId});
+        int i = SqlUtil.executeUpdate(sql, rulesId);
+        return SqlUtil.executeUpdate(sql2, rulesId);
     }
 
 
     public int deleteRoleRules(String rulesId) {
         String sql = "delete from role_rules where ROLE_RULES_RULES_ID=?";
-        return SqlUtil.executeUpdate(sql, new Object[]{rulesId});
+        return SqlUtil.executeUpdate(sql, rulesId);
     }
 
 
     public List selectAllUrl() {
         String sql = "select * from url";
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[0]);
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql);
         List li = new ArrayList();
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {

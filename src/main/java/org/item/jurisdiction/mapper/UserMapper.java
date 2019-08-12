@@ -14,11 +14,8 @@ public class UserMapper {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
 
     public User userLogin(String userphone, String usermail, String password) throws ParseException {
-
         String sql = "select * from user where USER_TELPHONE=? and USER_PASSWORD=? or USER_EMAIL=? and USER_PASSWORD=? and USER_STATUS=0";
-
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[]{userphone, password, usermail, password});
-
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, userphone, password, usermail, password);
         User user = null;
 
         if (list.size() > 0) {
@@ -53,7 +50,7 @@ public class UserMapper {
 
         String sql = "select * from user";
 
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[0]);
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql);
 
         List<User> li = null;
 
@@ -99,9 +96,9 @@ public class UserMapper {
 
         String sql2 = "delete from user_role where USER_ROLE_USER_ID=?";
 
-        int i = SqlUtil.executeUpdate(sql, new Object[]{userId});
+        int i = SqlUtil.executeUpdate(sql, userId);
 
-        int j = SqlUtil.executeUpdate(sql2, new Object[]{userId});
+        int j = SqlUtil.executeUpdate(sql2, userId);
 
         return i + j;
 
@@ -111,7 +108,7 @@ public class UserMapper {
 
         String sql = "update user set USER_NAME=?,USER_TELPHONE=?,USER_EMAIL=? where USER_ID=?";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{user.getUserName(), user.getUserTelphone(), user.getUserEmail(), user.getUserId()});
+        return SqlUtil.executeUpdate(sql, user.getUserName(), user.getUserTelphone(), user.getUserEmail(), user.getUserId());
 
     }
 
@@ -119,7 +116,7 @@ public class UserMapper {
 
         String sql = "update user set USER_ERROR=USER_ERROR+1 where USER_ID=?";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{userId});
+        return SqlUtil.executeUpdate(sql, userId);
 
     }
 
@@ -127,7 +124,7 @@ public class UserMapper {
 
         String sql = "update user set USER_EMAIL=? where USER_ID=?";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{email, userId});
+        return SqlUtil.executeUpdate(sql, email, userId);
 
     }
 
@@ -135,7 +132,7 @@ public class UserMapper {
 
         String sql = "update user set USER_EMAIL=null where USER_ID=?";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{userId});
+        return SqlUtil.executeUpdate(sql, userId);
 
     }
 
@@ -143,7 +140,7 @@ public class UserMapper {
 
         String sql = "select * from user where USER_ID=?";
 
-        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[]{id});
+        List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, id);
 
         User user = null;
 
@@ -179,7 +176,7 @@ public class UserMapper {
 
         String sql = "update user set USER_HEADIMG=? where USER_ID=?";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{user.getUserHeadimg(), user.getUserId()});
+        return SqlUtil.executeUpdate(sql, user.getUserHeadimg(), user.getUserId());
 
     }
 
@@ -187,7 +184,7 @@ public class UserMapper {
 
         String sql = "update user set USER_NAME=? where USER_ID=?";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{user.getUserName(), user.getUserId()});
+        return SqlUtil.executeUpdate(sql, user.getUserName(), user.getUserId());
 
     }
 
@@ -195,7 +192,7 @@ public class UserMapper {
 
         String sql = "select * from user where USER_NAME=?";
 
-        return SqlUtil.executeQuery(sql, new Object[]{username});
+        return SqlUtil.executeQuery(sql, username);
 
     }
 
@@ -203,7 +200,7 @@ public class UserMapper {
 
         String sql = "select * from user where USER_EMAIL=?";
 
-        return SqlUtil.executeQuery(sql, new Object[]{useremail});
+        return SqlUtil.executeQuery(sql, useremail);
 
     }
 
@@ -211,7 +208,7 @@ public class UserMapper {
 
         String sql = "select * from user where USER_TELPHONE=?";
 
-        return SqlUtil.executeQuery(sql, new Object[]{usertelphone});
+        return SqlUtil.executeQuery(sql, usertelphone);
 
     }
 
@@ -219,28 +216,28 @@ public class UserMapper {
 
         String sql = "insert into user values(?,?,?,?,?,now(),?,?,?)";
 
-        return SqlUtil.executeUpdate(sql, new Object[]{user.getUserId(), user.getUserName(), user.getUserPassword(), user.getUserTelphone(), user.getUserEmail(), user.getUserStatus(), user.getUserError(), user.getUserHeadimg()});
+        return SqlUtil.executeUpdate(sql, user.getUserId(), user.getUserName(), user.getUserPassword(), user.getUserTelphone(), user.getUserEmail(), user.getUserStatus(), user.getUserError(), user.getUserHeadimg());
 
     }
 
     public List findMenuByUserId(String id) {
 
         String sql = "SELECT f.MENU_ID MENU_ID, f.MENU_NAME MENU_NAME FROM user a\nLEFT JOIN user_role b ON a.USER_ID = b.USER_ROLE_USER_ID\nLEFT JOIN role c ON b.USER_ROLE_ROLE_ID = c.ROLE_ID\nLEFT JOIN role_rules d ON c.ROLE_ID = d.ROLE_RULES_ROLE_ID\nLEFT JOIN rules e ON d.ROLE_RULES_RULES_ID = e.RULES_ID\nLEFT JOIN menu f ON e.RULES_MENU_ID = f.MENU_ID\nWHERE a.USER_ID = ? \nGROUP BY MENU_ID, MENU_NAME";
-        return SqlUtil.executeQuery(sql, new Object[]{id});
+        return SqlUtil.executeQuery(sql, id);
 
     }
 
     public List findRulesById(String userId) {
 
         String sql = "SELECT\nE.RULES_ID RULES_ID,\nE.RULES_NAME RULES_NAME,\nE.RULES_URL RULES_URL,\nF.MENU_ID MENU_ID,\nF.MENU_NAME MENU_NAME\nFROM\nUSER A\nLEFT JOIN user_role B ON A.USER_ID = B.USER_ROLE_USER_ID\nLEFT JOIN role C ON B.USER_ROLE_ROLE_ID = C.ROLE_ID\nLEFT JOIN role_rules D ON C.ROLE_ID = D.ROLE_RULES_ROLE_ID\nLEFT JOIN rules E ON D.ROLE_RULES_RULES_ID = E.RULES_ID\nLEFT JOIN menu F ON E.RULES_MENU_ID = F.MENU_ID \nWHERE\nA.USER_ID = ? \nGROUP BY\nRULES_ID,\nRULES_NAME,\nMENU_ID,\nMENU_NAME";
-        return SqlUtil.executeQuery(sql, new Object[]{userId});
+        return SqlUtil.executeQuery(sql, userId);
 
     }
 
     public List findRoleByUserId(String userId) {
 
         String sql = "SELECT C.ROLE_ID rulesid,C.ROLE_NAME rulesname FROM user A\nLEFT JOIN user_role B ON A.USER_ID = B.USER_ROLE_USER_ID\nLEFT JOIN role C ON B.USER_ROLE_ROLE_ID = C.ROLE_ID\nWHERE A.USER_ID = ?\nGROUP BY rulesid,rulesname";
-        return SqlUtil.executeQuery(sql, new Object[]{userId});
+        return SqlUtil.executeQuery(sql, userId);
 
     }
 
