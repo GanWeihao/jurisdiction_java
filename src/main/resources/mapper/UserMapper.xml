@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.item.jurisdiction.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="org.item.jurisdiction.model.User">
+        <id property="userId" column="USER_ID"></id>
+        <result property="userName" column="USER_NAME"></result>
+        <result property="userPassword" column="USER_PASSWORD"></result>
+        <result property="userTelphone" column="USER_TELPHONE"></result>
+        <result property="userEmail" column="USER_EMAIL"></result>
+        <result property="userStatus" column="USER_STATUS"></result>
+        <result property="userTime" column="USER_TIME"></result>
+        <result property="userError" column="USER_ERROR"></result>
+        <result property="userHeadimg" column="USER_HEADIMG"></result>
+    </resultMap>
+
+    <delete id="deleteUserByPrimaryKey" parameterType="org.item.jurisdiction.model.User">
+        delete from user where USER_ID in
+        <foreach item="userList" collection="list" open="(" separator="," close=")">
+            #{userList}
+        </foreach>
+    </delete>
+
+</mapper>

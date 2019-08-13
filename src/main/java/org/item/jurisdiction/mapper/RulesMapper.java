@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.item.jurisdiction.bo.Rules_Menu;
 import org.item.jurisdiction.mapper.RulesMapper;
 import org.item.jurisdiction.model.Menu;
@@ -16,8 +17,14 @@ import org.item.jurisdiction.model.Url;
 import org.item.jurisdiction.model.UserRole;
 import org.item.jurisdiction.util.SqlUtil;
 import org.item.jurisdiction.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class RulesMapper {
+    @Autowired
+    SqlSessionFactory sqlSessionFactory;
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
 
     public Role findByRoleId(String roleId) {

@@ -1,8 +1,10 @@
 package org.item.jurisdiction.service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import org.item.jurisdiction.model.User;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface UserService {
   List findAllUser() throws ParseException;
@@ -38,4 +40,6 @@ public interface UserService {
   int deleteUser(String paramString);
   
   int updateUser(User paramUser);
+
+  int deleteUserByPrimaryKey(List<String> userList) throws IOException;
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.item.jurisdiction.mapper.UserRoleMapper">
+    <resultMap id="BaseResultMap" type="org.item.jurisdiction.model.UserRole">
+        <id property="userRoleId" column="USER_ROLE_ID"></id>
+        <result property="userRoleUserId" column="USER_ROLE_USER_ID"></result>
+        <result property="userRoleRoleId" column="USER_ROLE_ROLE_ID"></result>
+    </resultMap>
+
+    <delete id="deleteUserRoleByUserId" parameterType="org.item.jurisdiction.model.User">
+        delete from user_role where USER_ROLE_USER_ID in
+        <foreach item="userList" collection="list" open="(" separator="," close=")">
+            #{userList}
+        </foreach>
+    </delete>
+
+</mapper>

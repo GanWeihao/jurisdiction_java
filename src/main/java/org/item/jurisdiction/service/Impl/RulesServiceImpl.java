@@ -10,12 +10,14 @@ import org.item.jurisdiction.model.RoleRules;
 import org.item.jurisdiction.model.Rules;
 import org.item.jurisdiction.model.UserRole;
 import org.item.jurisdiction.service.RulesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class RulesServiceImpl implements RulesService {
-    RulesMapper rulesMapper = new RulesMapper();
+    @Autowired
+    RulesMapper rulesMapper;
 
     public List findByRole(String roleId) {
         return this.rulesMapper.findByRole(roleId);

@@ -1,16 +1,27 @@
 package org.item.jurisdiction.mapper;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.item.jurisdiction.model.User;
+import org.item.jurisdiction.util.SqlSessionUtil;
 import org.item.jurisdiction.util.SqlUtil;
 import org.item.jurisdiction.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class UserMapper {
+    @Autowired
+    SqlSessionFactory sqlSessionFactory;
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
 
     public User userLogin(String userphone, String usermail, String password) throws ParseException {
@@ -235,10 +246,17 @@ public class UserMapper {
     }
 
     public List findRoleByUserId(String userId) {
-
         String sql = "SELECT C.ROLE_ID rulesid,C.ROLE_NAME rulesname FROM user A\nLEFT JOIN user_role B ON A.USER_ID = B.USER_ROLE_USER_ID\nLEFT JOIN role C ON B.USER_ROLE_ROLE_ID = C.ROLE_ID\nWHERE A.USER_ID = ?\nGROUP BY rulesid,rulesname";
         return SqlUtil.executeQuery(sql, userId);
+    }
 
+    public int deleteUserByPrimaryKey(List<String> userList) throws IOException {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        int i = sqlSession.delete("org.item.jurisdiction.mapper.UserMapper.deleteUserByPrimaryKey",userList);
+        sqlSession.commit();
+        System.out.println(i);
+        sqlSession.close();
+        return i;
     }
 
 }

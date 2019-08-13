@@ -1,5 +1,6 @@
 package org.item.jurisdiction.service.Impl;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
@@ -7,12 +8,14 @@ import java.util.UUID;
 import org.item.jurisdiction.mapper.UserMapper;
 import org.item.jurisdiction.model.User;
 import org.item.jurisdiction.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
-public class UserServiceImpl
-        implements UserService {
-    UserMapper userMapper = new UserMapper();
+public class UserServiceImpl implements UserService {
+    @Autowired
+    UserMapper userMapper;
 
     public int updateName(User user) {
         return this.userMapper.updateName(user);
@@ -65,7 +68,7 @@ public class UserServiceImpl
         if (user.getUserEmail() == null) {
             user.setUserEmail("");
         }
-        String id = UUID.randomUUID().toString();
+        String id = UUID.randomUUID().toString().replaceAll("-","");
         user.setUserId(id);
         user.setUserError(Integer.valueOf(0));
         user.setUserStatus(Integer.valueOf(0));
@@ -91,5 +94,10 @@ public class UserServiceImpl
 
     public int updateUser(User user) {
         return this.userMapper.updateUser(user);
+    }
+
+    @Override
+    public int deleteUserByPrimaryKey(List<String> userList) throws IOException {
+        return userMapper.deleteUserByPrimaryKey(userList);
     }
 }

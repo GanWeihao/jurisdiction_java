@@ -1,27 +1,32 @@
 package org.item.jurisdiction.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 /*     */ import java.util.List;
 /*     */ import org.apache.commons.mail.HtmlEmail;
 /*     */ import org.item.jurisdiction.controller.UserController;
 /*     */ import org.item.jurisdiction.model.User;
-/*     */ import org.item.jurisdiction.service.UserService;
-/*     */ import org.item.jurisdiction.util.JsonResult;
+/*     */ import org.item.jurisdiction.service.UserRoleService;
+import org.item.jurisdiction.service.UserService;
+/*     */ import org.item.jurisdiction.util.Constants;
+import org.item.jurisdiction.util.JsonResult;
 /*     */ import org.item.jurisdiction.util.StringUtil;
 /*     */ import org.springframework.beans.factory.annotation.Autowired;
-/*     */ import org.springframework.web.bind.annotation.CrossOrigin;
-/*     */ import org.springframework.web.bind.annotation.RequestMapping;
-/*     */ import org.springframework.web.bind.annotation.RequestMethod;
-/*     */ import org.springframework.web.bind.annotation.RestController;
+/*     */ import org.springframework.web.bind.annotation.*;
+/*     */
+/*     */
+/*     */
 
 @CrossOrigin
 @RestController
-public class UserController{
+public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    UserRoleService userRoleService;
 
     @RequestMapping({"/user/findall"})
-     public JsonResult findall() {
+    public JsonResult findall() {
         JsonResult js;
         try {
             List list = this.userService.findAllUser();
@@ -155,28 +160,16 @@ public class UserController{
     /*     */
     @RequestMapping({"/user/update"})
     /*     */ public JsonResult updateUser(User user) {
-        /*     */
         JsonResult js;
-        /*     */
         try {
-            /* 171 */
             int i = this.userService.updateUser(user);
-            /* 172 */
             js = new JsonResult("200", "修改成功");
-            /* 173 */
         } catch (Exception e) {
-            /* 174 */
             js = new JsonResult("500", "修改异常");
-            /*     */
         }
-        /* 176 */
         return js;
-        /*     */
     }
 
-    /*     */
-    /*     */
-    /*     */
     @RequestMapping({"/user/delete"})
     /*     */ public JsonResult deleteUser(String userId) {
         /*     */
@@ -449,24 +442,43 @@ public class UserController{
     /*     */
     /*     */
     @RequestMapping({"/user/role"})
-    /*     */ public JsonResult role(String userId) {
-        /*     */
+    public JsonResult role(String userId) {
         JsonResult js;
-        /*     */
         try {
-            /* 328 */
             List list = this.userService.findRoleByUserId(userId);
-            /* 329 */
             js = new JsonResult("200", "查询成功", list);
-            /* 330 */
         } catch (Exception e) {
-            /* 331 */
             js = new JsonResult("500", "查询异常");
-            /*     */
         }
-        /* 333 */
         return js;
-        /*     */
     }
-    /*     */
+
+    @RequestMapping(value = "/user/deleteoptions", method = RequestMethod.GET)
+    public JsonResult deleteoptions(@RequestParam("user") List<String> users){
+        List<String> userList = new ArrayList<>();
+        for(String u : users){
+            String u1 = u.replaceAll("\\[","");
+            String u2 = u1.replaceAll("\\]","");
+            String u3 = u2.replaceAll("\"","");
+            userList.add(u3);
+        }
+        JsonResult js;
+        try {
+            int i = userService.deleteUserByPrimaryKey(userList);
+            if(i!=0){
+                int j = userRoleService.deleteUserRoleByUserId(userList);
+                if(j!=0){
+                    js = new JsonResult(Constants.STATUS_SUCCESS,"删除成功",j);
+                }else{
+                    js = new JsonResult(Constants.STATUS_SUCCESS,"删除用户成功，删除权限失败",i);
+                }
+            }else{
+                js = new JsonResult(Constants.STATUS_FAIL,"删除失败",i);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            js = new JsonResult(Constants.STATUS_FAIL,"删除异常");
+        }
+        return js;
+    }
 }
