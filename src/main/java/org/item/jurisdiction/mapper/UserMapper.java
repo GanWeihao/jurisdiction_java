@@ -58,41 +58,23 @@ public class UserMapper {
     }
 
     public List findAllUser() throws ParseException {
-
         String sql = "select * from user";
-
         List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql);
-
         List<User> li = null;
-
         if (list.size() > 0) {
-
             li = new ArrayList<User>();
-
             for (int i = 0; i < list.size(); i++) {
-
                 User user = new User();
-
                 user.setUserId(StringUtil.isnull(((HashMap) list.get(i)).get("USER_ID")).toString());
-
                 user.setUserName(StringUtil.isnull(((HashMap) list.get(i)).get("USER_NAME")).toString());
-
                 user.setUserPassword(StringUtil.isnull(((HashMap) list.get(i)).get("USER_PASSWORD")).toString());
-
                 user.setUserTelphone(StringUtil.isnull(((HashMap) list.get(i)).get("USER_TELPHONE")).toString());
-
                 user.setUserEmail(StringUtil.isnull(((HashMap) list.get(i)).get("USER_EMAIL")).toString());
-
                 user.setUserTime(this.sdf.parse(StringUtil.isnull(((HashMap) list.get(i)).get("USER_TIME")).toString()));
-
                 user.setUserStatus(Integer.valueOf(StringUtil.iszore(((HashMap) list.get(i)).get("USER_STATUS")).toString()));
-
                 user.setUserError(Integer.valueOf(StringUtil.iszore(((HashMap) list.get(i)).get("USER_ERROR")).toString()));
-
                 user.setUserHeadimg(StringUtil.isnull(((HashMap) list.get(i)).get("USER_HEADIMG")).toString());
-
                 li.add(user);
-
             }
 
         }

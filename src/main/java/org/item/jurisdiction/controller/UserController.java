@@ -3,7 +3,9 @@ package org.item.jurisdiction.controller;
 import java.util.ArrayList;
 import java.util.Date;
 /*     */ import java.util.List;
-/*     */ import org.apache.commons.mail.HtmlEmail;
+/*     */ import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.mail.HtmlEmail;
 /*     */ import org.item.jurisdiction.controller.UserController;
 /*     */ import org.item.jurisdiction.model.User;
 /*     */ import org.item.jurisdiction.service.UserRoleService;
@@ -26,11 +28,14 @@ public class UserController {
     UserRoleService userRoleService;
 
     @RequestMapping({"/user/findall"})
-    public JsonResult findall() {
+    public JsonResult findall(@RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "8")Integer pageSize) {
         JsonResult js;
         try {
+            System.out.println(pageSize);
+            PageHelper.startPage(pageNum, pageSize);
             List list = this.userService.findAllUser();
-            js = new JsonResult("200", "查询成功", list);
+            PageInfo pageInfo = new PageInfo(list);
+            js = new JsonResult("200", "查询成功", pageInfo);
         } catch (Exception e) {
             js = new JsonResult("500", "查询异常");
         }
