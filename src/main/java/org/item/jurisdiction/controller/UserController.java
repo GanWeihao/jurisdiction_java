@@ -5,6 +5,7 @@ import java.util.Date;
 /*     */ import java.util.List;
 /*     */ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.deploy.net.HttpResponse;
 import org.apache.commons.mail.HtmlEmail;
 /*     */ import org.item.jurisdiction.controller.UserController;
 /*     */ import org.item.jurisdiction.model.User;
@@ -13,8 +14,20 @@ import org.item.jurisdiction.service.UserService;
 /*     */ import org.item.jurisdiction.util.Constants;
 import org.item.jurisdiction.util.JsonResult;
 /*     */ import org.item.jurisdiction.util.StringUtil;
-/*     */ import org.springframework.beans.factory.annotation.Autowired;
-/*     */ import org.springframework.web.bind.annotation.*;
+/*     */ import org.item.jurisdiction.util.TokenProccessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+/*     */ import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.jedis.JedisConnection;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.Jedis;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 /*     */
 /*     */
 /*     */
@@ -22,10 +35,16 @@ import org.item.jurisdiction.util.JsonResult;
 @CrossOrigin
 @RestController
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     UserService userService;
     @Autowired
     UserRoleService userRoleService;
+    @Autowired
+    JedisConnectionFactory jedisConnectionFactory;
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @RequestMapping({"/user/findall"})
     public JsonResult findall(@RequestParam(defaultValue = "1")Integer pageNum, @RequestParam(defaultValue = "8")Integer pageSize) {
@@ -43,7 +62,7 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/user/login"}, method = {RequestMethod.POST})
-    public JsonResult login(User user) {
+    public JsonResult login(User user, HttpServletResponse response) {
         JsonResult js;
         try {
             String telphone = StringUtil.isnull(user.getUserTelphone()).toString();
@@ -54,6 +73,10 @@ public class UserController {
                     js = new JsonResult("404", "首次登录需要验证邮箱", u);
                 } else {
                     this.userService.loginFirst(u.getUserId());
+                    String _token = TokenProccessor.getInstance().makeToken();
+                    System.out.println(_token);
+                    redisTemplate.opsForHash().put("userLogin", _token, u);
+                    response.addCookie(new Cookie("userLogin",_token));
                     js = new JsonResult("200", "登陆成功", u);
                 }
             } else {

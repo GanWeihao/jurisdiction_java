@@ -13,7 +13,7 @@ public class Test1 {
         jedis.hset("lanqiao","id","01");
         jedis.hset("lanqiao","name","甘伟浩");
         String ms = jedis.get("ms");
-        Map map = jedis.hgetAll("lanqiao");
+        String  map = jedis.hgetAll("lanqiao").get("name");
         System.out.println(map);
         jedis.close();
     }

@@ -167,6 +167,12 @@
             <version>1.7.2.RELEASE</version>
         </dependency>
 
+        <!-- Ehcache实现,用于参考 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-ehcache</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
 
     </dependencies>

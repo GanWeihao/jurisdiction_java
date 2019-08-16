@@ -26,31 +26,18 @@ public class UserMapper {
         String sql = "select * from user where USER_TELPHONE=? and USER_PASSWORD=? or USER_EMAIL=? and USER_PASSWORD=? and USER_STATUS=0";
         List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, userphone, password, usermail, password);
         User user = null;
-
         if (list.size() > 0) {
-
             user = new User();
-
             user.setUserId(StringUtil.isnull(((HashMap) list.get(0)).get("USER_ID")).toString());
-
             user.setUserName(StringUtil.isnull(((HashMap) list.get(0)).get("USER_NAME")).toString());
-
             user.setUserPassword(StringUtil.isnull(((HashMap) list.get(0)).get("USER_PASSWORD")).toString());
-
             user.setUserTelphone(StringUtil.isnull(((HashMap) list.get(0)).get("USER_TELPHONE")).toString());
-
             user.setUserEmail(StringUtil.isnull(((HashMap) list.get(0)).get("USER_EMAIL")).toString());
-
             user.setUserTime(this.sdf.parse(StringUtil.isnull(((HashMap) list.get(0)).get("USER_TIME")).toString()));
-
             user.setUserStatus(Integer.valueOf(StringUtil.iszore(((HashMap) list.get(0)).get("USER_STATUS")).toString()));
-
             user.setUserError(Integer.valueOf(StringUtil.iszore(((HashMap) list.get(0)).get("USER_ERROR")).toString()));
-
             user.setUserHeadimg(StringUtil.isnull(((HashMap) list.get(0)).get("USER_HEADIMG")).toString());
-
         }
-
         return user;
 
     }

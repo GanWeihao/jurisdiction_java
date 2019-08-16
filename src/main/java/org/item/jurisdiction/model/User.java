@@ -1,5 +1,6 @@
 package org.item.jurisdiction.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class User {

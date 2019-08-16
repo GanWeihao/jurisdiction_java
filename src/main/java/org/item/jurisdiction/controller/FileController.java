@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.item.jurisdiction.util.JsonResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin
 @RestController
 public class FileController {
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+
     @RequestMapping(value = {"/file/upload"}, method = {RequestMethod.POST})
     public JsonResult fileUpload2(@RequestParam("userHeadimg") MultipartFile file) throws IOException {
         JsonResult js;
