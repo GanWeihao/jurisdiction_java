@@ -93,7 +93,7 @@ public class RulesMapper {
     public List findallRulesWithMenu() throws ParseException {
         String sql = "SELECT\n\t*\nFROM\n\trules a\n\tLEFT JOIN menu b ON a.RULES_MENU_ID = b.MENU_ID";
         List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql, new Object[0]);
-        List li = new ArrayList();
+        List<Rules_Menu> li = new ArrayList<Rules_Menu>();
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Rules_Menu rules_menu = new Rules_Menu();
@@ -148,7 +148,7 @@ public class RulesMapper {
     public List selectAllUrl() {
         String sql = "select * from url";
         List<HashMap<String, Object>> list = SqlUtil.executeQuery(sql);
-        List li = new ArrayList();
+        List<Url> li = new ArrayList();
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Url url = new Url();

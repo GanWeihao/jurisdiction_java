@@ -38,13 +38,15 @@ public class LoginIntercepter implements HandlerInterceptor {
         Cookie [] cookies = request.getCookies();
         String token = null;
 
-        for (Cookie cookie : cookies) {
-            switch(cookie.getName()){
-                case "userLogin":
-                    token = cookie.getValue();
-                    break;
-                default:
-                    break;
+        if(cookies.length!=0){
+            for (Cookie cookie : cookies) {
+                switch(cookie.getName()){
+                    case "userLogin":
+                        token = cookie.getValue();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
