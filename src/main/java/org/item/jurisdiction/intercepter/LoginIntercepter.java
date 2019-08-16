@@ -3,6 +3,8 @@ package org.item.jurisdiction.intercepter;
 import org.item.jurisdiction.controller.FileController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,10 +16,14 @@ import javax.servlet.http.HttpSession;
 public class LoginIntercepter implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(LoginIntercepter.class);
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         System.out.println("postHandle方法执行了");
+        System.out.println(handler);
     }
 
     @Override
@@ -29,12 +35,16 @@ public class LoginIntercepter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         // 在拦截点执行前拦截，如果返回true则不执行拦截点后的操作（拦截成功）
         // 返回false则不执行拦截
-        String token = request.getParameter("_token");
+        Cookie [] cookies = request.getCookies();
+        String token = null;
 
-        Cookie[] cookies = request.getCookies();
-        for(Cookie cookie : cookies){
-            if(cookie.getName().equals("userLogin")){
-                token = cookie.getValue();
+        for (Cookie cookie : cookies) {
+            switch(cookie.getName()){
+                case "userLogin":
+                    token = cookie.getValue();
+                    break;
+                default:
+                    break;
             }
         }
 

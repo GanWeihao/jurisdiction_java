@@ -2,35 +2,26 @@ package org.item.jurisdiction.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-/*     */ import java.util.List;
-/*     */ import com.github.pagehelper.PageHelper;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.deploy.net.HttpResponse;
 import org.apache.commons.mail.HtmlEmail;
-/*     */ import org.item.jurisdiction.controller.UserController;
-/*     */ import org.item.jurisdiction.model.User;
-/*     */ import org.item.jurisdiction.service.UserRoleService;
+import org.item.jurisdiction.model.User;
+import org.item.jurisdiction.service.UserRoleService;
 import org.item.jurisdiction.service.UserService;
-/*     */ import org.item.jurisdiction.util.Constants;
+import org.item.jurisdiction.util.Constants;
 import org.item.jurisdiction.util.JsonResult;
-/*     */ import org.item.jurisdiction.util.StringUtil;
-/*     */ import org.item.jurisdiction.util.TokenProccessor;
+import org.item.jurisdiction.util.StringUtil;import org.item.jurisdiction.util.TokenProccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-/*     */ import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import redis.clients.jedis.Jedis;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-/*     */
-/*     */
-/*     */
+
 
 @CrossOrigin
 @RestController
@@ -73,10 +64,18 @@ public class UserController {
                     js = new JsonResult("404", "首次登录需要验证邮箱", u);
                 } else {
                     this.userService.loginFirst(u.getUserId());
-                    String _token = TokenProccessor.getInstance().makeToken();
-                    System.out.println(_token);
-                    redisTemplate.opsForHash().put("userLogin", _token, u);
-                    response.addCookie(new Cookie("userLogin",_token));
+
+                    String _token = TokenProccessor.getInstance().makeToken(u.getUserId());
+
+                    redisTemplate.opsForValue().set(_token,u.getUserId());
+
+                    redisTemplate.expire("userLogin",1, TimeUnit.DAYS);
+
+                    Cookie cookie = new Cookie("userLogin",_token);
+
+                    cookie.setPath("/");
+                    cookie.setMaxAge(60*60*60);
+                    response.addCookie(cookie);
                     js = new JsonResult("200", "登陆成功", u);
                 }
             } else {
